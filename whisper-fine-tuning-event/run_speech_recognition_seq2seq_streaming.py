@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import datasets
 import torch
-from datasets import DatasetDict, IterableDatasetDict, interleave_datasets, load_dataset
+from datasets import DatasetDict, IterableDatasetDict, interleave_datasets, load_dataset, Audio
 from torch.utils.data import IterableDataset
 
 import evaluate
@@ -309,8 +309,8 @@ def load_multiple_streaming_datasets(
         all_splits = []
         if "+" in split[i]:
             # load multiple splits separated by the `+` symbol with streaming mode
-            for split_name in split.split("+"):
-                dataset_split = load_dataset(dataset_name, dataset_config_names[i], split=splits[i], streaming=streaming, **kwargs)
+            for split_name in split[i].split("+"):
+                dataset_split = load_dataset(dataset_name, dataset_config_names[i], split=split_name, streaming=streaming, **kwargs)
                 dataset_split = dataset_split.cast_column("audio", Audio(sampling_rate))
                 if text_column_names[i] != "sentence":
                     dataset_split = dataset_split.rename_column(text_column_names[i], "sentence")
@@ -415,7 +415,7 @@ def main():
             dataset_names, 
             dataset_config_names=dataset_config_names,
             text_column_names=text_column_names, 
-            split=splits,
+            splits=splits,
             use_auth_token=True if model_args.use_auth_token else None,
             streaming=data_args.streaming,
         )
