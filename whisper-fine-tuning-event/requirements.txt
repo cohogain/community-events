@@ -7,4 +7,5 @@ jiwer
 evaluate>=0.3.0
 more-itertools
 tensorboard
-numba<=0.56.3
+numba<0.56.4
+numpy<1.24
