@@ -2,10 +2,10 @@ python run_speech_recognition_seq2seq_streaming.py \
 	--model_name_or_path="openai/whisper-small" \
 	--eval_split_name="test" \
 	--model_index_name="Whisper Medium Gaeilge" \
-	--max_steps="5000" \
+	--max_steps="7000" \
 	--output_dir="./" \
-	--per_device_train_batch_size="64" \
-	--per_device_eval_batch_size="32" \
+	--per_device_train_batch_size="16" \
+	--per_device_eval_batch_size="8" \
 	--logging_steps="25" \
 	--learning_rate="1e-5" \
 	--warmup_steps="500" \
