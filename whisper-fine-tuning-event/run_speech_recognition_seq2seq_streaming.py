@@ -311,7 +311,7 @@ def load_multiple_streaming_datasets(
             # load multiple splits separated by the `+` symbol with streaming mode
             for split_name in split.split("+"):
                 dataset_split = load_dataset(dataset_name, dataset_config_names[i], split=splits[i], streaming=streaming, **kwargs)
-                dataset_split = = dataset_split.cast_column("audio", Audio(sampling_rate))
+                dataset_split = dataset_split.cast_column("audio", Audio(sampling_rate))
                 if text_column_names[i] != "sentence":
                     dataset_split = dataset_split.rename_column(text_column_names[i], "sentence")
                 dataset_split = dataset_split.remove_columns(set(dataset_split.features.keys()) - set(["audio", "sentence"]))
