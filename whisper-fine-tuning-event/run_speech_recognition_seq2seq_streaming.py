@@ -306,14 +306,18 @@ def load_multiple_streaming_datasets(
     all_datasets = []
     # iterate over the datasets we want to interleave
     for i, dataset_name in enumerate(dataset_names):
-        dataset = load_dataset(dataset_name, dataset_config_names[i], split=splits[i], streaming=streaming, **kwargs)
-        # resample to specified sampling rate
-        dataset = dataset.cast_column("audio", Audio(sampling_rate))
-        #  normalise columns to ["audio", "sentence"]
-        if text_column_names[i] != "sentence":
-            dataset = dataset.rename_column(text_column_names[i], "sentence")
-        dataset = dataset.remove_columns(set(dataset.features.keys()) - set(["audio", "sentence"]))
-        all_datasets.append(dataset)
+        all_splits = []
+        if "+" in split[i]:
+            # load multiple splits separated by the `+` symbol with streaming mode
+            for split_name in split.split("+"):
+                dataset_split = load_dataset(dataset_name, dataset_config_names[i], split=splits[i], streaming=streaming, **kwargs)
+                dataset_split = = dataset_split.cast_column("audio", Audio(sampling_rate))
+                if text_column_names[i] != "sentence":
+                    dataset_split = dataset_split.rename_column(text_column_names[i], "sentence")
+                dataset_split = dataset_split.remove_columns(set(dataset_split.features.keys()) - set(["audio", "sentence"]))
+                all_splits.append(dataset_split)
+            # interleave multiple splits to form one dataset
+            all_datasets.append(interleave_datasets(all_splits))
 
     interleaved_dataset = interleave_datasets(all_datasets, stopping_strategy=stopping_strategy)
     return interleaved_dataset
