@@ -62,7 +62,7 @@ logger = logging.getLogger(__name__)
 dataset_names = ["mozilla-foundation/common_voice_11_0", "google/fleurs", "cohogain/living_audio_ga-IE"]
 dataset_config_names = ["ga-IE", "ga_ie", ""]
 text_column_names = ["sentence", "transcription", "transcription"]
-splits = ["train+validation", "train+validation", ""]
+splits = ["train+validation", "train+validation+test", ""]
 
 
 @dataclass
