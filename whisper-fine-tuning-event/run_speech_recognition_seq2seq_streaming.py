@@ -311,9 +311,9 @@ def load_multiple_streaming_datasets(
             # load multiple splits separated by the `+` symbol with streaming mode
             for split_name in splits[i].split("+"):
                 dataset_split = load_dataset(dataset_name, dataset_config_names[i], split=split_name, streaming=streaming, **kwargs)
-                dataset_split = dataset_split.cast_column("audio", Audio(sampling_rate))
                 if text_column_names[i] != "sentence":
                     dataset_split = dataset_split.rename_column(text_column_names[i], "sentence")
+                dataset_split = dataset_split.cast_column("audio", Audio(sampling_rate=16000))
                 dataset_split = dataset_split.remove_columns(set(dataset_split.features.keys()) - set(["audio", "sentence"]))
                 all_splits.append(dataset_split)
             # interleave multiple splits to form one dataset
@@ -411,14 +411,21 @@ def main():
     raw_datasets = IterableDatasetDict() if data_args.streaming else DatasetDict()
 
     if training_args.do_train:
-        raw_datasets["train"] = load_multiple_streaming_datasets(
-            dataset_names, 
-            dataset_config_names=dataset_config_names,
-            text_column_names=text_column_names, 
-            splits=splits,
-            use_auth_token=True if model_args.use_auth_token else None,
-            streaming=data_args.streaming,
-        )
+        common_voice = load_maybe_streaming_dataset("mozilla-foundation/common_voice_11_0", "ga-IE", split="train+validation")
+        common_voice = common_voice.cast_column("audio", Audio(sampling_rate=16000))
+        common_voice = common_voice.remove_columns(set(common_voice.features.keys()) - set(["audio", "sentence"]))
+
+        fleurs  = load_maybe_streaming_dataset("google/fleurs", "ga_ie", split="train+validation+test")
+        fleurs = fleurs.cast_column("audio", Audio(sampling_rate=16000))
+        fleurs = fleurs.rename_column("raw_transcription", "sentence")
+        fleurs = fleurs.remove_columns(set(fleurs.features.keys()) - set(["audio", "sentence"]))
+
+        living_audio  = load_maybe_streaming_dataset("cohogain/living_audio_ga-IE", "", split="")
+        living_audio = living_audio.cast_column("audio", Audio(sampling_rate=16000))
+        living_audio = living_audio.rename_column("transcription", "sentence")    
+
+        all_datasets = [common_voice, fleurs, living_audio]
+        raw_datasets["train"] = interleave_datasets(all_datasets, stopping_strategy="all_exhausted")
 
     if training_args.do_eval:
         raw_datasets["eval"] = load_maybe_streaming_dataset(
