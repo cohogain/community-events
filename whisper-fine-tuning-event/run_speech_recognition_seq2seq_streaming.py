@@ -420,7 +420,7 @@ def main():
         fleurs = fleurs.rename_column("raw_transcription", "sentence")
         fleurs = fleurs.remove_columns(set(fleurs.features.keys()) - set(["audio", "sentence"]))
 
-        living_audio  = load_maybe_streaming_dataset("cohogain/living_audio_ga-IE", "", split="")
+        living_audio  = load_maybe_streaming_dataset("cohogain/living_audio_ga-IE")
         living_audio = living_audio.cast_column("audio", Audio(sampling_rate=16000))
         living_audio = living_audio.rename_column("transcription", "sentence")    
 
