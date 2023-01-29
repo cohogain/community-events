@@ -307,9 +307,9 @@ def load_multiple_streaming_datasets(
     # iterate over the datasets we want to interleave
     for i, dataset_name in enumerate(dataset_names):
         all_splits = []
-        if "+" in split[i]:
+        if "+" in splits[i]:
             # load multiple splits separated by the `+` symbol with streaming mode
-            for split_name in split[i].split("+"):
+            for split_name in splits[i].split("+"):
                 dataset_split = load_dataset(dataset_name, dataset_config_names[i], split=split_name, streaming=streaming, **kwargs)
                 dataset_split = dataset_split.cast_column("audio", Audio(sampling_rate))
                 if text_column_names[i] != "sentence":
