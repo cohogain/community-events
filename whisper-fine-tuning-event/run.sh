@@ -1,5 +1,5 @@
 python run_speech_recognition_seq2seq_streaming.py \
-	--model_name_or_path="openai/whisper-small" \
+	--model_name_or_path="openai/whisper-medium" \
 	--eval_split_name="test" \
 	--model_index_name="Whisper Medium Gaeilge" \
 	--max_steps="7000" \
