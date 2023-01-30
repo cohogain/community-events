@@ -341,6 +341,7 @@ def load_maybe_streaming_dataset(dataset_name, dataset_config_name, split="train
     else:
         # load a single split *with* streaming mode
         dataset = load_dataset(dataset_name, dataset_config_name, split=split, streaming=streaming, **kwargs)
+        dataset = dataset.cast_column("audio", Audio(sampling_rate=16000))
         return dataset
 
 
