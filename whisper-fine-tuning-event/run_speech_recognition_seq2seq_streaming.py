@@ -425,7 +425,19 @@ def main():
         living_audio = living_audio.cast_column("audio", Audio(sampling_rate=16000))
         living_audio = living_audio.rename_column("transcription", "sentence")    
 
-        all_datasets = [common_voice, fleurs, living_audio]
+        fuaimeanna = load_maybe_streaming_dataset("cohogain/fuaimeanna_ga-IE", "")
+        fuaimeanna = fuaimeanna.cast_column("audio", Audio(sampling_rate=16000))
+        fuaimeanna = fuaimeanna.rename_column("transcription", "sentence")    
+
+        fuaim = load_maybe_streaming_dataset("cohogain/Fuaim", "")
+        fuaim = fuaim.cast_column("audio", Audio(sampling_rate=16000))
+        fuaim = fuaim.rename_column("transcription", "sentence")  
+
+        comhra = load_maybe_streaming_dataset("cohogain/comhra_ga-IE", "")
+        comhra = comhra.cast_column("audio", Audio(sampling_rate=16000))
+        comhra = comhra.rename_column("transcription", "sentence")
+
+        all_datasets = [common_voice, fleurs, living_audio, fuaimeanna, fuaim, comhra]
         raw_datasets["train"] = interleave_datasets(all_datasets, stopping_strategy="all_exhausted")
 
     if training_args.do_eval:
