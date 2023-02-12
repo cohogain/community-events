@@ -1,7 +1,7 @@
 python run_speech_recognition_seq2seq_streaming.py \
-	--model_name_or_path="openai/whisper-medium" \
+	--model_name_or_path="openai/whisper-large-v2" \
 	--eval_split_name="test" \
-	--model_index_name="Whisper Medium Gaeilge" \
+	--model_index_name="Whisper Large v2 Gaeilge" \
 	--max_steps="7000" \
 	--output_dir="./" \
 	--per_device_train_batch_size="16" \
