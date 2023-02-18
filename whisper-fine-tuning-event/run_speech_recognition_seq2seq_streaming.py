@@ -437,7 +437,12 @@ def main():
         comhra = comhra.cast_column("audio", Audio(sampling_rate=16000))
         comhra = comhra.rename_column("transcription", "sentence")
 
-        all_datasets = [common_voice, fleurs, living_audio, fuaimeanna, fuaim, comhra]
+        speaking_irish = load_maybe_streaming_dataset("cohogain/speaking-irish", "")
+        speaking_irish = speaking_irish.cast_column("audio", Audio(sampling_rate=16000))
+        speaking_irish = speaking_irish.rename_column("transcription", "sentence")
+
+
+        all_datasets = [common_voice, fleurs, living_audio, fuaimeanna, fuaim, comhra, speaking_irish]
         raw_datasets["train"] = interleave_datasets(all_datasets, stopping_strategy="all_exhausted")
 
     if training_args.do_eval:
