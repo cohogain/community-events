@@ -425,13 +425,13 @@ def main():
         living_audio = living_audio.cast_column("audio", Audio(sampling_rate=16000))
         living_audio = living_audio.rename_column("transcription", "sentence")    
 
-        fuaimeanna = load_maybe_streaming_dataset("cohogain/fuaimeanna_ga-IE", "")
+        fuaimeanna = load_maybe_streaming_dataset("cohogain/Fuaimeanna", "")
         fuaimeanna = fuaimeanna.cast_column("audio", Audio(sampling_rate=16000))
         fuaimeanna = fuaimeanna.rename_column("transcription", "sentence")    
 
-        # fuaim = load_maybe_streaming_dataset("cohogain/Fuaim", "")
-        # fuaim = fuaim.cast_column("audio", Audio(sampling_rate=16000))
-        # fuaim = fuaim.rename_column("transcription", "sentence")  
+        fuam = load_maybe_streaming_dataset("cohogain/Fuam", "")
+        fuam = fuam.cast_column("audio", Audio(sampling_rate=16000))
+        fuam = fuam.rename_column("transcription", "sentence")  
 
         comhra = load_maybe_streaming_dataset("cohogain/comhra_ga-IE", "")
         comhra = comhra.cast_column("audio", Audio(sampling_rate=16000))
@@ -441,9 +441,13 @@ def main():
         speaking_irish = speaking_irish.cast_column("audio", Audio(sampling_rate=16000))
         speaking_irish = speaking_irish.rename_column("transcription", "sentence")
 
+        buntus_cainte = load_maybe_streaming_dataset("cohogain/buntus-cainte", "")
+        buntus_cainte = buntus_cainte.cast_column("audio", Audio(sampling_rate=16000))
+        buntus_cainte = buntus_cainte.rename_column("transcription", "sentence")
+
 
         # all_datasets = [common_voice, fleurs, living_audio, fuaimeanna, fuaim, comhra, speaking_irish]
-        all_datasets = [common_voice, fleurs, living_audio, fuaimeanna, comhra, speaking_irish]
+        all_datasets = [common_voice, fleurs, living_audio, fuaimeanna, fuam, comhra, speaking_irish, buntus_cainte]
         raw_datasets["train"] = interleave_datasets(all_datasets, stopping_strategy="all_exhausted")
 
     if training_args.do_eval:

@@ -1,8 +1,9 @@
 python run_speech_recognition_seq2seq_streaming.py \
 	--model_name_or_path="openai/whisper-large-v2" \
 	--eval_split_name="test" \
+	--language="welsh" \
 	--model_index_name="Whisper Large v2 Gaeilge" \
-	--max_steps="7000" \
+	--max_steps="5000" \
 	--output_dir="./" \
 	--per_device_train_batch_size="16" \
 	--per_device_eval_batch_size="8" \
